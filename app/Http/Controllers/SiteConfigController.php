@@ -18,7 +18,6 @@ class SiteConfigController extends Controller
     }
     public function siteUpdate(Request $request)
     {
-        
         if($request->hasfile('header_logo'))
         {
             try {
@@ -69,8 +68,6 @@ class SiteConfigController extends Controller
             ]);
         }else{
             $validate = Validator::make($request->all(), [
-                'header_logo'   => 'required',
-                'footer_logo'   => 'required',
                 'phone_number'  => 'required',
                 'email'         => 'required',
                 'address'       => 'required',

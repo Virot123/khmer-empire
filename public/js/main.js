@@ -163,6 +163,7 @@ function updateSite(){
         beforeSend: (xhr) => {
         },
         success: (data) => {
+          console.log(data)
           if(data['status']==true){
             triggerClick();
             sweetAlertSuccess(data['message']);
