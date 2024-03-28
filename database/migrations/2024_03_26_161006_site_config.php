@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class History extends Migration
+class SiteConfig extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class History extends Migration
      */
     public function up()
     {
-        Schema::create('histories', function (Blueprint $table) {
+        Schema::create('site_configs', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('thumbnail');
-            $table->text('description');
-            $table->integer('created_by');
+            $table->string('header_logo');
+            $table->string('footer_logo');
+            $table->string('phone_number');
+            $table->string('email');
+            $table->string('address');
+            $table->string('telegram');
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ class History extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('histories');
+        Schema::dropIfExists('site_configs');
     }
 }

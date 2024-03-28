@@ -3,54 +3,74 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Art;
+use Illuminate\Support\Carbon;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Routing\Controller;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ArtController extends Controller
 {
     public function index(Request $request){
-        $items = Media::orderBy('created_at', 'desc')->paginate(10);
-        return view('medias.index',compact(['items']));
+        $query = Art::query();
+        $dateFilter = $request->date_filter;
+        $search = $request->search;
+        switch($dateFilter){
+            case 'today':
+                $query->whereDate('created_at',Carbon::today());
+                break;
+            case 'yesterday':
+                $query->wheredate('created_at',Carbon::yesterday());
+                break;
+            case 'this_week':
+                $query->whereBetween('created_at',[Carbon::now()->startOfWeek(),Carbon::now()->endOfWeek()]);
+                break;
+            case 'last_week':
+                $query->whereBetween('created_at',[Carbon::now()->subWeek(),Carbon::now()]);
+                break;
+            case 'this_month':
+                $query->whereMonth('created_at',Carbon::now()->month);
+                break;
+            case 'last_month':
+                $query->whereMonth('created_at',Carbon::now()->subMonth()->month);
+                break;
+            case 'this_year':
+                $query->whereYear('created_at',Carbon::now()->year);
+                break;
+            case 'last_year':
+                $query->whereYear('created_at',Carbon::now()->subYear()->year);
+                break;                       
+        }
+        $items = $query->where('title', 'LIKE', '%'. $search .'%')->orderBy('created_at', 'desc')->paginate(10);
+        return view('arts.index',compact(['items','dateFilter','search']));
     }
 
     public function create()
     {
-        $users = User::get();
-        $str='';
-        $str.= '<select name="user_id" >';
-        foreach ($users as $user){
-            $str.='<option value="'.$user->id.'">'.$user->name.'</option>';
-        }
-        $str.='</select>';
-
-        $media='';
-        $media.= '<select name="thumbnail" >';
-        
-        foreach (Helper::$MEDIAS as $index=>&$item){
-            $media.='<option value="'.$item.'">'.ucfirst($item).'</option>';
-        }
-        $media.='</select>';
-
         $form="";
         $form ='
-        <div class="vr-popup-add-new">
+        <div class="vr-popup-add-new" style="width:1000px;">
             <div class="card">
                 <div class="vr-header-popup">
-                    <h5 class="text-center">Add Media</h5>
+                    <h5 class="text-center">Add Art</h5>
                     <span class="vr_remove_popup vr-remove-popup"><i class="fas fa-window-close"></i></span>
                 </div>
-                <form class="form-card form_submit" action="/dashboard/media" method="post" enctype="multipart/form-data">
+                <form class="form-card form_submit" action="/dashboard/art" method="post" enctype="multipart/form-data">
                 '.csrf_field().'
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Link<span class="text-danger"> *</span></label> 
-                            <input type="text" id="fname" name="link" placeholder="Enter your link" onblur="validate(1)">
+                            <label class="form-control-label ">Title<span class="text-danger"> *</span></label> 
+                            <input type="text" id="fname" name="title" placeholder="Enter your title" onblur="validate(1)">
                         </div>
-                        <div class="form-group col- sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Choose a Media:<span class="text-danger"> *</span></label> 
-                            '.$media.'
+                        <div class="form-group col-sm-12 flex-column d-flex"> 
+                            <label class="form-control-label ">Thumbnail<span class="text-danger"> *</span></label> 
+                            <input type="file" name="thumbnail">
                         </div>
-                        <div class="form-group col- sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Choose a User:<span class="text-danger"> *</span></label> 
-                            '.$str.'
+                        <div class="form-group col-sm-12 flex-column d-flex"> 
+                            <label class="form-control-label ">Description<span class="text-danger"> *</span></label> 
+                            <textarea name="description" rows="8" cols="50" placeholder="Enter your description"></textarea>
                         </div>
                     </div>
                     <div class="vr-btn-addnew">
@@ -69,16 +89,30 @@ class ArtController extends Controller
     public function store(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'link' => 'required',
-            'user_id' => 'required',
-            'thumbnail' => 'required',
+            'title'         => 'required',
+            'description'   => 'required',
+            'thumbnail'     => 'required',
         ]);
         if ($validate->fails())
         {return response()->json($validate->errors()); }
-        $item = Media::create([
-            'thumbnail'      =>$request->thumbnail,
-            'user_id'     =>$request->user_id,
-            'link'     =>$request->link,
+
+        if($request->hasfile('thumbnail'))
+        {
+            try {
+                $file = $request->file('thumbnail');
+                $extenstion = $file->getClientOriginalExtension();
+                $filename = rand(1,9999).'.'.$extenstion;
+                $file->move(public_path('storage/arts'), $filename);
+              } catch (\Exception $e) {
+                  return $e->getMessage();
+              }
+        }
+
+        $item = Art::create([
+            'thumbnail'     =>$filename,
+            'description'   =>$request->description,
+            'title'         =>$request->title,
+            'created_by'    =>Auth::user()->id,
         ]);
         return response()->json([
             'message'   => "Create Success",
@@ -90,49 +124,32 @@ class ArtController extends Controller
 
     public function edit($id)
     {
-        $item   = Media::findOrFail($id);
-        $users = User::get();
-
-        $str='';
-        $str.= '<select name="user_id" >';
-        foreach ($users as $user){
-            $check = $user->id == $item->user_id?"selected":"";
-            $str.='<option '.$check.' value="'.$user->id.'">'.$user->name.'</option>';
-        }
-        $str.='</select>';
-
-        $media='';
-        $media.= '<select name="thumbnail" >';
-        
-        foreach (Helper::$MEDIAS as $m){
-            $check = $m == $item->thumbnail?"selected":"";
-            $media.='<option '.$check.' value="'.$m.'">'.ucfirst($m).'</option>';
-        }
-        $media.='</select>';
+        $item   = Art::findOrFail($id);
 
         $form="";
         $form ='
-        <div class="vr-popup-add-new" >
+        <div class="vr-popup-add-new" style="width:1000px;" >
             <div class="card">
                 <div class="vr-header-popup">
                     <h5 class="text-center">Edit Media</h5>
                     <span class="vr_remove_popup vr-remove-popup"><i class="fas fa-window-close"></i></span>
                 </div>
-                <form class="form-card form_submit" action="'.route('media.update',$id).'" method="POST" enctype="multipart/form-data">
+                <form class="form-card form_submit" action="'.route('art.update',$id).'" method="POST" enctype="multipart/form-data">
                 '.csrf_field().'
                 <input type="hidden" value="PUT" name="_method">
                     <div class="row justify-content-between text-left">
                         <div class="form-group col-sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Link<span class="text-danger"> *</span></label> 
-                            <input type="text" id="fname" name="link" value=" '.$item->link.'" placeholder="Enter your link" onblur="validate(1)">
+                            <label class="form-control-label ">Title<span class="text-danger"> *</span></label> 
+                            <input type="text" id="fname" name="title" value="'.$item->title.'" placeholder="Enter your title" onblur="validate(1)">
                         </div>
-                        <div class="form-group col- sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Choose a Media:<span class="text-danger"> *</span></label> 
-                            '.$media.'
+                        <div class="form-group col-sm-12 flex-column d-flex"> 
+                            <label class="form-control-label ">Thumbnail<span class="text-danger"> *</span></label> 
+                            <input type="file" name="thumbnail">
+                            <input type="hidden" name="thumbnail_hidden" value="'.$item->thumbnail.'">
                         </div>
-                        <div class="form-group col- sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Choose a User:<span class="text-danger"> *</span></label> 
-                            '.$str.'
+                        <div class="form-group col-sm-12 flex-column d-flex"> 
+                            <label class="form-control-label ">Description<span class="text-danger"> *</span></label> 
+                            <textarea name="description" rows="8" cols="50" placeholder="Enter your description">'.$item->description.'</textarea>
                         </div>
                     </div>
                     <div class="vr-btn-addnew">
@@ -151,16 +168,31 @@ class ArtController extends Controller
     public function update(Request $request, $id)
     {
         $validate = Validator::make($request->all(), [
-            'link' => 'required',
-            'user_id' => 'required',
-            'thumbnail' => 'required',
+            'title'         => 'required',
+            'description'   => 'required',
+            'thumbnail'     => 'required',
         ]);
         if ($validate->fails())
         {return response()->json($validate->errors()); }
-        Media::where('id',$id)->update([
-            'thumbnail'   =>$request->thumbnail,
-            'user_id'     =>$request->user_id,
-            'link'        =>$request->link,
+
+        if($request->hasfile('thumbnail'))
+        {
+            try {
+                $file = $request->file('thumbnail');
+                $extenstion = $file->getClientOriginalExtension();
+                $filename = rand(1,9999).'.'.$extenstion;
+                $file->move(public_path('storage/arts'), $filename);
+              } catch (\Exception $e) {
+                  return $e->getMessage();
+              }
+        }else{
+            $filename = $request->thumbnail_hidden;
+        }
+
+        Art::where('id',$id)->update([
+            'thumbnail'     =>$filename,
+            'description'   =>$request->description,
+            'title'         =>$request->title,
         ]);
         return response()->json([
             'message'=> "Update Success",
@@ -170,32 +202,35 @@ class ArtController extends Controller
 
     }
 
-
     public function show($id)
     {
-        $item   = Media::findOrFail($id);
+        $item   = Art::findOrFail($id);
         $form="";
         $form ='
-        <div class="vr-popup-view">
+        <div class="vr-popup-view" style="width:1000px;">
             <div class="card">
                 <div class="vr-header-popup">
-                    <h5 class="text-center">View Media #'.$item->id.'</h5>
+                    <h5 class="text-center">View Art #'.$item->id.'</h5>
                     <span class="vr_remove_popup vr-remove-popup"><i class="fas fa-window-close"></i></span>
                 </div>
                 <div class="vr-body-popup">
                     <div>
                         <p class="vr-body-popup-label">Thumbnail :</p>
                         <div class="vr-body-image">
-                            <img src="'. getMediaPhoto($item->thumbnail) .'" alt="">
+                            <img src="'. getPhoto("arts",$item->thumbnail) .'" alt="">
                         </div>
                     </div>
                      <div>
+                        <p class="vr-body-popup-label">Title :</p>
+                        <p>'.$item->title.'</p>
+                    </div>
+                    <div>
                         <p class="vr-body-popup-label">User Name :</p>
-                        <p>'.getUserName($item->id)->name.'</p>
+                        <p>'.getUserName($item->created_by)->name.'</p>
                     </div>
                      <div>
-                        <p class="vr-body-popup-label">Link :</p>
-                        <p>'.$item->link.'</p>
+                        <p class="vr-body-popup-label">Description:</p>
+                        <p>'.$item->description.'</p>
                     </div>
                 </div>
             </div>

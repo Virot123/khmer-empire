@@ -10,7 +10,10 @@
       </div>
       <div class="vr-navbar-right">
         <div class="vr-navbar-profile">
-            <img src="https://newprofilepic.photo-cdn.net//assets/images/article/profile.jpg?4d355bd" alt="">
+          @php
+              $user = getUser(Auth::user()->id);
+          @endphp
+              <img src="{{ getPhoto("users",$user->profile) }}" alt="">
         </div>
       </div>
   </div>
