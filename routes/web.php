@@ -21,16 +21,16 @@ use App\Http\Controllers\ContactController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-
+    return view('welcome');
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
     Route::prefix('dashboard')->group(function() {
         Route::resource('media', MediaController::class);
         Route::resource('user', UserController::class);
