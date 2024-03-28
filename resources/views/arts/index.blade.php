@@ -3,8 +3,8 @@
   <div class="vr-main-content">
     <div class="vr-head-content">
       <div class="vr-head-content-top">
-        <div class="vr-head-content-top-title">USERS </div>
-        <a href="/dashboard/user" class="autoSave superLink" id="autoSave"></a>
+        <div class="vr-head-content-top-title">ARTS </div>
+        <a href="/dashboard/art" class="autoSave superLink" id="autoSave"></a>
         <div class="form-group vr-head-form-search">
           <form method="get" >
             <div class="input-group vr-navbar-search-field">
@@ -28,7 +28,7 @@
             </div>
           </form>
         </div>
-        <div class="vr-btn-add vr__btn_popup" data-url="/dashboard/user/create">
+        <div class="vr-btn-add vr__btn_popup" data-url="/dashboard/art/create">
           <a href="#" class="btn btn-primary btn-raised"> <i class="fas fa-plus"></i> Add</a>
         </div>
       </div>
@@ -39,40 +39,41 @@
           <thead class="vr-body-content-table-head">
             <tr>
               <th><i class="fas fa-trash"></i></th>
-              <th>Profile</th>
-              <th>Name</th>
-              <th>Position</th>
+              <th>Thumbnail</th>
+              <th>Title</th>
+              <th>User Name</th>
               <th>Last Update</th>
               <th >Action</th>
             </tr>
           </thead>
           <tbody class="vr-body-content-table-body">
             @foreach ($items as $index=>$item )
+            @php
+              $user =getUserName($item->created_by);
+            @endphp
             <tr>
+
               <td><input type="checkbox" name="" id=""></td>
               <td>
                 <div class="vr-body-image">
-                  <img src="{{ getPhoto("users",$item->profile) }}" alt="">
+                  <img src="{{ getPhoto("arts",$item->thumbnail) }}" alt="">
                 </div>
-              </td>
-              <td>{{ $item->name }}</td>
-              <td>
-                {{ $item->position }}
-              </td>
+              <td>{{ $item->title }}</td>
+              <td>{{ $user->name }}</td>
               <td>{{ $item->created_at }}</td>
               <td>
                 <div class="vr-dropdown-wrapper vr__dropdown_wrapper">
                   <i class="fas fa-ellipsis-h vr-dropdown-icon vr_dropdown_icon"></i>
                   <div class="vr-dropdown-box vr_dropdown_box">
-                    <div class="vr-dropdown-list c-green vr__btn_popup" data-url="/dashboard/user/{{ $item->id }}">
+                    <div class="vr-dropdown-list c-green vr__btn_popup" data-url="/dashboard/art/{{ $item->id }}">
                       <div class="vr-dropdown-list-left"><i class="fas fa-eye"></i></div>
                       <div class="vr-dropdown-list-right " >View</div>
                     </div>
-                    <div class="vr-dropdown-list c-blue vr__btn_popup" data-url="/dashboard/user/{{ $item->id }}/edit">
+                    <div class="vr-dropdown-list c-blue vr__btn_popup" data-url="/dashboard/art/{{ $item->id }}/edit">
                       <div class="vr-dropdown-list-left"><i class="far fa-edit"></i></div>
                       <div class="vr-dropdown-list-right " >Edit</div>
                     </div>
-                    <div class="vr-dropdown-list c-red vr_remove_record"  id="{{ $item->id }}" table="users">
+                    <div class="vr-dropdown-list c-red vr_remove_record"  id="{{ $item->id }}" table="art">
                       <div class="vr-dropdown-list-left"><i class="fas fa-trash"></i></div>
                       <div class="vr-dropdown-list-right">Delete</div>
                     </div>

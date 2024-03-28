@@ -7,6 +7,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ArtController;
 use App\Http\Controllers\CivilizationController;
+use App\Http\Controllers\SiteConfigController;
+use App\Http\Controllers\ContactController;
  
 /*
 |--------------------------------------------------------------------------
@@ -33,8 +35,11 @@ Route::middleware('auth')->group(function () {
         Route::resource('media', MediaController::class);
         Route::resource('user', UserController::class);
         Route::resource('art', ArtController::class);
+        Route::resource('contact', ContactController::class);
         Route::resource('history', HistoryController::class);
         Route::resource('civilization', CivilizationController::class);
+        Route::get('site_config', [SiteConfigController::class,'index']);
+        Route::post('site_update', [SiteConfigController::class,'siteUpdate']);
 
         Route::get('/ajaxRemove', [DashboardController::class, 'ajaxRemove']);
     });

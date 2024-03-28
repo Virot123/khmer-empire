@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Civilization extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'thumbnail',
+        'title',
+        'description',
+        'created_by',
+    ];
 }

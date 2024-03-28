@@ -3,7 +3,7 @@
   <div class="vr-main-content">
     <div class="vr-head-content">
       <div class="vr-head-content-top">
-        <div class="vr-head-content-top-title">Media </div>
+        <div class="vr-head-content-top-title">MEDIAS </div>
         <a href="/dashboard/media" class="autoSave superLink" id="autoSave"></a>
         <div class="vr-btn-add vr__btn_popup" data-url="/dashboard/media/create">
           <a href="#" class="btn btn-primary btn-raised"> <i class="fas fa-plus"></i> Add</a>
@@ -61,7 +61,7 @@
         </table>
       </div>
     @else 
-    <h1>Hello</h1>
+    @include('layouts.404')
     @endif
     <div class="vr-foot-content">
       <div class="vr-footer-content-left"></div>

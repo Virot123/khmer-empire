@@ -638,3 +638,37 @@ body {
     height: 100%;
     object-fit: cover;
   }
+  .vr-page-not-found{
+    width: 100%;
+    height: inherit;
+  }
+  .vr-page-not-found img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  
+.vr-body-content form {
+  display: block;
+}
+
+.vr-body-content input {
+  width: 100%;
+  border: none;
+  background: hsl(0 0% 93%);
+  border-radius: .25rem;
+}
+.vr-body-content textarea{
+  width: 100%;
+  height: auto;
+}
+.vr-body-content .vr-site-img {
+  width: 100%;
+  height: 300px;
+}
+.vr-body-content .vr-site-img img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

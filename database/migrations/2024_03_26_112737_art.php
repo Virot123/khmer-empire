@@ -15,6 +15,10 @@ class Art extends Migration
     {
         Schema::create('art', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('thumbnail');
+            $table->text('description');
+            $table->integer('created_by');
             $table->timestamps();
         });
     }

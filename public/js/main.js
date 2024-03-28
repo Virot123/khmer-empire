@@ -12,7 +12,7 @@ function initializePage() {
 }
 
 $(document).on('pjax:complete', function() {
-  initializePage();
+  initializePage(); 
   loadContent();
 });
 
@@ -135,13 +135,46 @@ function formSubmit(){
               $('.vr_popup').css('display',"none");
             }
           }else{
-            sweetAlertFail(data['message'])
+            sweetAlertFail(data)
           }
         }
         
       });
   });
 }
+
+
+function updateSite(){
+  $('.updateSite').on('submit',function(e){
+    e.preventDefault()
+    var url = $(this).attr('action');
+    var method = $(this).attr('method');
+    var data = new FormData(this);
+    console.log(data)
+    $.ajax({
+        type: method ,
+        url: url,
+        data: data,
+        dataType: 'json',
+        cache: false,
+        contentType: false,
+        processData: false,
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        beforeSend: (xhr) => {
+        },
+        success: (data) => {
+          if(data['status']==true){
+            triggerClick();
+            sweetAlertSuccess(data['message']);
+          }else{
+            sweetAlertFail(data)
+          }
+        }
+        
+      });
+  });
+}
+updateSite();
 
 function ajaxRemove(){
   $('.vr_remove_record').on('click',function(e){
@@ -165,7 +198,7 @@ function ajaxRemove(){
             triggerClick();
             sweetAlertSuccess(data['message']);
           }else{
-            sweetAlertFail(data['message'])
+            sweetAlertFail(data)
           }
         }
         
@@ -195,7 +228,7 @@ function ajaxStatus(){
             triggerClick();
             sweetAlertSuccess(data['message']);
           }else{
-            sweetAlertFail(data['message'])
+            sweetAlertFail(data)
           }
         }
         
@@ -218,7 +251,7 @@ function sweetAlertFail(msg){
   Swal.fire({
     icon: 'error',
     title: 'Oops',
-    text: msg,
+    text: msg.message,
     showConfirmButton: false,
     timer: 2000
   })

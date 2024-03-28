@@ -13,8 +13,12 @@ class Civilization extends Migration
      */
     public function up()
     {
-        Schema::create('civilization', function (Blueprint $table) {
+        Schema::create('civilizations', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->string('thumbnail');
+            $table->text('description');
+            $table->integer('created_by');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class Civilization extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('civilization');
+        Schema::dropIfExists('civilizations');
     }
 }
