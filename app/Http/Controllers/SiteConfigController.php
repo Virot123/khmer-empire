@@ -18,7 +18,6 @@ class SiteConfigController extends Controller
     }
     public function siteUpdate(Request $request)
     {
-        
         if($request->hasfile('header_logo'))
         {
             try {
@@ -58,7 +57,7 @@ class SiteConfigController extends Controller
             ]);
             if ($validate->fails())
             {return response()->json($validate->errors()); }
-    
+
             $item = SiteConfig::where('id',$check->id)->update([
                 'header_logo'   => $header_logo,
                 'footer_logo'   => $footer_logo,
@@ -78,7 +77,7 @@ class SiteConfigController extends Controller
             ]);
             if ($validate->fails())
             {return response()->json($validate->errors()); }
-    
+
             $item = SiteConfig::create([
                 'header_logo'   => $header_logo,
                 'footer_logo'   => $footer_logo,
@@ -93,6 +92,6 @@ class SiteConfigController extends Controller
             'result'    => $item,
             'status'    =>true,
             'modal'     =>true,
-        ]); 
+        ]);
     }
 }

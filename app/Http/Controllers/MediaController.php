@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 class MediaController extends Controller
 {
     public function index(Request $request){
-        $items = Media::orderBy('created_at', 'desc')->paginate(10);
+        $items = Media::orderBy('created_at', 'desc')->get();
         return view('medias.index',compact(['items']));
     }
 
@@ -26,7 +26,7 @@ class MediaController extends Controller
 
         $media='';
         $media.= '<select name="thumbnail" >';
-        
+
         foreach (Helper::$MEDIAS as $index=>&$item){
             $media.='<option value="'.$item.'">'.ucfirst($item).'</option>';
         }
@@ -43,16 +43,16 @@ class MediaController extends Controller
                 <form class="form-card form_submit" action="/dashboard/media" method="post" enctype="multipart/form-data">
                 '.csrf_field().'
                     <div class="row justify-content-between text-left">
-                        <div class="form-group col-sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Link<span class="text-danger"> *</span></label> 
+                        <div class="form-group col-sm-12 flex-column d-flex">
+                            <label class="form-control-label ">Link<span class="text-danger"> *</span></label>
                             <input type="text" id="fname" name="link" placeholder="Enter your link" onblur="validate(1)">
                         </div>
-                        <div class="form-group col- sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Choose a Media:<span class="text-danger"> *</span></label> 
+                        <div class="form-group col- sm-12 flex-column d-flex">
+                            <label class="form-control-label ">Choose a Media:<span class="text-danger"> *</span></label>
                             '.$media.'
                         </div>
-                        <div class="form-group col- sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Choose a User:<span class="text-danger"> *</span></label> 
+                        <div class="form-group col- sm-12 flex-column d-flex">
+                            <label class="form-control-label ">Choose a User:<span class="text-danger"> *</span></label>
                             '.$str.'
                         </div>
                     </div>
@@ -66,7 +66,7 @@ class MediaController extends Controller
         return response()->json([
             'result'=> $form,
             'status'=>true,
-        ]); 
+        ]);
     }
 
     public function store(Request $request)
@@ -88,7 +88,7 @@ class MediaController extends Controller
             'result'    => $item,
             'status'    =>true,
             'modal'     =>true,
-        ]); 
+        ]);
     }
 
     public function edit($id)
@@ -106,7 +106,7 @@ class MediaController extends Controller
 
         $media='';
         $media.= '<select name="thumbnail" >';
-        
+
         foreach (Helper::$MEDIAS as $m){
             $check = $m == $item->thumbnail?"selected":"";
             $media.='<option '.$check.' value="'.$m.'">'.ucfirst($m).'</option>';
@@ -125,16 +125,16 @@ class MediaController extends Controller
                 '.csrf_field().'
                 <input type="hidden" value="PUT" name="_method">
                     <div class="row justify-content-between text-left">
-                        <div class="form-group col-sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Link<span class="text-danger"> *</span></label> 
+                        <div class="form-group col-sm-12 flex-column d-flex">
+                            <label class="form-control-label ">Link<span class="text-danger"> *</span></label>
                             <input type="text" id="fname" name="link" value=" '.$item->link.'" placeholder="Enter your link" onblur="validate(1)">
                         </div>
-                        <div class="form-group col- sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Choose a Media:<span class="text-danger"> *</span></label> 
+                        <div class="form-group col- sm-12 flex-column d-flex">
+                            <label class="form-control-label ">Choose a Media:<span class="text-danger"> *</span></label>
                             '.$media.'
                         </div>
-                        <div class="form-group col- sm-12 flex-column d-flex"> 
-                            <label class="form-control-label ">Choose a User:<span class="text-danger"> *</span></label> 
+                        <div class="form-group col- sm-12 flex-column d-flex">
+                            <label class="form-control-label ">Choose a User:<span class="text-danger"> *</span></label>
                             '.$str.'
                         </div>
                     </div>
@@ -148,7 +148,7 @@ class MediaController extends Controller
         return response()->json([
             'result'=> $form,
             'status'=>true,
-        ]); 
+        ]);
     }
 
     public function update(Request $request, $id)
@@ -169,7 +169,7 @@ class MediaController extends Controller
             'message'=> "Update Success",
             'status'=>true,
             'modal'=>true,
-        ]); 
+        ]);
 
     }
 
@@ -207,6 +207,6 @@ class MediaController extends Controller
         return response()->json([
             'result'=> $form,
             'status'=>true,
-        ]); 
+        ]);
     }
 }

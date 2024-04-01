@@ -10,7 +10,7 @@ use App\Models\User;
 class AboutUsController extends Controller
 {
     function index(){
-        $result = User::with("medias")->limit(3)->get();
+        $result = User::with("medias")->limit(9)->get();
         foreach($result as $re){
             $re->profile = getPhoto("users",$re->profile);
             if($re->medias){
@@ -20,10 +20,10 @@ class AboutUsController extends Controller
             }
         }
         $ArraysItem['items'] = $result;
-        $ArraysItem['sites'] = getSite();
+        // $ArraysItem['sites'] = getSite();
         return response()->json([
             'result'=> $ArraysItem,
             'status'=>true,
-        ]); 
+        ]);
     }
 }

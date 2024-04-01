@@ -9,7 +9,7 @@ use App\Http\Controllers\ArtController;
 use App\Http\Controllers\CivilizationController;
 use App\Http\Controllers\SiteConfigController;
 use App\Http\Controllers\ContactController;
- 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -23,10 +23,9 @@ use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('welcome');
-});
-
+})->middleware(['auth'])->name('dashboard');
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('welcome');
 
 })->middleware(['auth'])->name('dashboard');
 
