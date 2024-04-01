@@ -11,7 +11,7 @@ class CivilizationController extends Controller
     function index(){
         $civil = Civilization::orderby('created_at','desc')->paginate(10);
         foreach($civil as $his){
-            $his->thumbnail = getPhoto("arts",$his->thumbnail);
+            $his->thumbnail = getPhoto("civilizations",$his->thumbnail);
             $his->created_by = getUserName($his->created_by)->name;
         }
         $ArraysItem['items'] = $civil;
