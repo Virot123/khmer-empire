@@ -89,7 +89,7 @@
     @include('layouts.404')
     @endif
     <div class="vr-foot-content">
-      <div class="vr-footer-content-left"></div>
+      <div class="vr-footer-content-left">{{ $items->links('pagination::bootstrap-4') }}</div>
       <div class="vr-footer-content-center"></div>
       <div class="vr-footer-content-right"></div>
     </div>
