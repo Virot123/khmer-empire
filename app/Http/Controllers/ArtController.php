@@ -170,7 +170,6 @@ class ArtController extends Controller
         $validate = Validator::make($request->all(), [
             'title'         => 'required',
             'description'   => 'required',
-            'thumbnail'     => 'required',
         ]);
         if ($validate->fails())
         {return response()->json($validate->errors()); }
