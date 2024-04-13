@@ -303,6 +303,10 @@ function ripplesEffect(e) {
   waves.css({top: y+'px', left: x+'px'}).addClass('ripple');
 };
 
+$('.vr-head-form-filter select').on('change',function(){
+  console.log("first")
+  $('.vr-navbar-btn-search').click();
+});
 
 // Enable pusher logging - don't include this in production
 // Pusher.logToConsole = true;

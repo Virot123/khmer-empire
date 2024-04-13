@@ -9,7 +9,7 @@
           <form method="get" >
             <div class="input-group vr-navbar-search-field">
               <input type="text" class="form-control input-text" value="{{ $search }}" name="search" placeholder="Search products...." aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <button class=" vr-navbar-btn-search btn btn-outline-warning btn-lg" type="button"><i class="fa fa-search"></i></button>
+              <button class=" vr-navbar-btn-search btn btn-outline-warning btn-lg" type="submit"><i class="fa fa-search"></i></button>
             </div>
             <div class="input-group vr-head-form-filter">
                 <label for="date_filter">Filter by Date:</label>
