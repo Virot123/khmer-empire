@@ -308,6 +308,11 @@ $('.vr-head-form-filter select').on('change',function(){
   $('.vr-navbar-btn-search').click();
 });
 
+if($('.vr_box_logout').length){
+  $('.vr_box_logout').on('click',function(){
+    $(this).parent().find(".vr_box_logout_target").toggleClass('active');
+  })
+}
 // Enable pusher logging - don't include this in production
 // Pusher.logToConsole = true;
 

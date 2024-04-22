@@ -13,7 +13,17 @@
           @php
               $user = getUser(Auth::user()->id);
           @endphp
-              <img src="{{ getPhoto("users",$user->profile) }}" alt="">
+              <img class="vr_box_logout" src="{{ getPhoto("users",$user->profile) }}" alt="">
+              <div class="vr_box_logout_target">
+                <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                  <x-dropdown-link :href="route('logout')"
+                          onclick="event.preventDefault();
+                                      this.closest('form').submit();">
+                      {{ __('Log Out') }}
+                  </x-dropdown-link>
+                </form>
+              </div>
         </div>
       </div>
   </div>
