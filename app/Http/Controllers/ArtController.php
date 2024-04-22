@@ -215,7 +215,7 @@ class ArtController extends Controller
                 <div class="vr-body-popup">
                     <div>
                         <p class="vr-body-popup-label">Thumbnail :</p>
-                        <div class="vr-body-image">
+                        <div class="vr-body-image-popup">
                             <img src="'. getPhoto("arts",$item->thumbnail) .'" alt="">
                         </div>
                     </div>
@@ -229,7 +229,7 @@ class ArtController extends Controller
                     </div>
                      <div>
                         <p class="vr-body-popup-label">Description:</p>
-                        <p>'.$item->description.'</p>
+                        <p class="vr-body-popup-detail">'.$item->description.'</p>
                     </div>
                 </div>
             </div>

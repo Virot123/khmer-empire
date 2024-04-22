@@ -8,12 +8,12 @@
             </div>
         </div>
         <ul class="nav flex-column bg-white mb-0">
-            <li class="nav-item vr_parent_dd vr-parent-dd">
+            {{-- <li class="nav-item vr_parent_dd vr-parent-dd">
                 <a href="/" class="nav-link text-dark font-italic vr_dd_target vr-dd-target">
                     <i class="fas fa-tachometer-alt text-primary"></i>
                     <span>Dashboard</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item vr_parent_dd vr-parent-dd">
                 <a href="/dashboard/user" class="nav-link text-dark font-italic vr_dd_target vr-dd-target">
                     <i class="fas fa-user-cog text-primary"></i>
@@ -43,12 +43,12 @@
                     <span>Site Config</span>
                 </a>
             </li>
-            <li class="nav-item vr_parent_dd vr-parent-dd">
+            {{-- <li class="nav-item vr_parent_dd vr-parent-dd">
                 <a href="/dashboard/contact" class="nav-link text-dark font-italic vr_dd_target vr-dd-target">
                     <i class="fas fa-cogs text-primary"></i>
                     <span>Contact</span>
                 </a>
-            </li>
+            </li> --}}
             
         </ul>
     </div>   

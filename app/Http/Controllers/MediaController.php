@@ -188,7 +188,7 @@ class MediaController extends Controller
                 <div class="vr-body-popup">
                     <div>
                         <p class="vr-body-popup-label">Thumbnail :</p>
-                        <div class="vr-body-image">
+                        <div class="vr-body-image-popup">
                             <img src="'. getMediaPhoto($item->thumbnail) .'" alt="">
                         </div>
                     </div>

@@ -8,7 +8,7 @@ class Helper
         2   => "linkin",
         3   => "instagram",
         4   => "telegram",
-    );
+    ); 
 
     public static function getUserName($id)
     {
